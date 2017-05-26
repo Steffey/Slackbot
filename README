@@ -1,0 +1,9 @@
+CClub Slackbot
+
+Use:
+"@<botname> <command>"
+
+Available commands:
+help - lists commands
+office - lists registered and unregistered users on the Computer Club wifi
+spy - ???
