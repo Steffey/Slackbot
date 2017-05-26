@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"sync/atomic"
 
 	"golang.org/x/net/websocket"
 )
@@ -22,7 +21,7 @@ type responseSelf struct {
 	ID string `json:"id"`
 }
 
-func slackStart(token string) (wsurl, id string, err error) {
+func slackStart(token string) (wsURL, id string, err error) {
 	URL := fmt.Sprintf("https://slack.com/api/rtm.start?token=%s", botToken)
 	resp, err := http.Get(URL)
 	if err != nil {
@@ -48,13 +47,12 @@ func slackStart(token string) (wsurl, id string, err error) {
 		return
 	}
 
-	wsurl = respObj.URL
+	wsURL = respObj.URL
 	id = respObj.Self.ID
 	return
 }
 
 type Message struct {
-	ID      uint64 `json:"id"`
 	Type    string `json:"type"`
 	Channel string `json:"channel"`
 	Text    string `json:"text"`
@@ -65,10 +63,7 @@ func getMessage(ws *websocket.Conn) (m Message, err error) {
 	return
 }
 
-var counter uint64
-
 func postMessage(ws *websocket.Conn, m Message) error {
-	m.ID = atomic.AddUint64(&counter, 1)
 	return websocket.JSON.Send(ws, m)
 }
 
